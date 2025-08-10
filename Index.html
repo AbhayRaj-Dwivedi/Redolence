@@ -1,15 +1,1093 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My First Website</title>
-  <style>
-    body { font-family: Arial; text-align: center; padding: 50px; }
-    h1 { color: #0077cc; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatchUP - Social Skill Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        
+        .neumorphic {
+            background: #f0f0f3;
+            box-shadow: 8px 8px 16px #d1d1d4, -8px -8px 16px #ffffff;
+        }
+        
+        .neumorphic-inset {
+            background: #f0f0f3;
+            box-shadow: inset 8px 8px 16px #d1d1d4, inset -8px -8px 16px #ffffff;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .coral-gradient {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .bounce-animation {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .screen {
+            display: none;
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .mobile-container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            z-index: 50;
+        }
+        
+        .skill-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .post-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 16px;
+            transition: transform 0.2s ease;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            z-index: 40;
+            transition: transform 0.2s ease;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .onboarding-slide {
+            display: none;
+        }
+        
+        .onboarding-slide.active {
+            display: block;
+        }
+    </style>
 </head>
-<body>
-  <h1>Welcome to My Website</h1>
-  <p>This site is hosted with no database or backend!</p>
-  <a href="mailto:me@example.com">Email Me</a>
-</body>
+<body class="bg-gray-50">
+    <div class="mobile-container">
+        
+        <!-- Splash Screen -->
+        <div id="splash" class="screen active">
+            <div class="gradient-bg h-screen flex flex-col items-center justify-center text-white">
+                <div class="bounce-animation mb-8">
+                    <h1 class="text-5xl font-bold tracking-tight">CatchUP</h1>
+                    <div class="w-20 h-1 bg-white rounded-full mx-auto mt-2"></div>
+                </div>
+                <p class="text-lg opacity-90 text-center px-8">Connect. Collaborate. Create.</p>
+                <div class="mt-12">
+                    <div class="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Onboarding Screen -->
+        <div id="onboarding" class="screen">
+            <div class="h-screen bg-white">
+                <!-- Slide 1 -->
+                <div id="slide1" class="onboarding-slide active h-full flex flex-col">
+                    <div class="flex-1 flex flex-col items-center justify-center px-8">
+                        <div class="text-6xl mb-8">💭</div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Post your thoughts & skills</h2>
+                        <p class="text-gray-600 text-center leading-relaxed">Share your expertise, showcase your work, and connect with like-minded professionals in your field.</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-center space-x-2 mb-6">
+                            <div class="w-8 h-2 bg-blue-500 rounded-full"></div>
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                        </div>
+                        <button onclick="nextSlide()" class="w-full gradient-bg text-white py-4 rounded-2xl font-semibold">Next</button>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div id="slide2" class="onboarding-slide h-full flex flex-col">
+                    <div class="flex-1 flex flex-col items-center justify-center px-8">
+                        <div class="text-6xl mb-8">🚀</div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Share or discover real opportunities</h2>
+                        <p class="text-gray-600 text-center leading-relaxed">Find freelance gigs, collaboration projects, and skill-based opportunities that match your expertise.</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-center space-x-2 mb-6">
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                            <div class="w-8 h-2 bg-blue-500 rounded-full"></div>
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                        </div>
+                        <button onclick="nextSlide()" class="w-full gradient-bg text-white py-4 rounded-2xl font-semibold">Next</button>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div id="slide3" class="onboarding-slide h-full flex flex-col">
+                    <div class="flex-1 flex flex-col items-center justify-center px-8">
+                        <div class="text-6xl mb-8">🎉</div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Host and join events near you</h2>
+                        <p class="text-gray-600 text-center leading-relaxed">Attend workshops, networking events, and skill-sharing meetups in your local community.</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-center space-x-2 mb-6">
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                            <div class="w-8 h-2 bg-blue-500 rounded-full"></div>
+                        </div>
+                        <div class="space-y-3">
+                            <button onclick="signUp('google')" class="w-full bg-white border-2 border-gray-200 text-gray-700 py-4 rounded-2xl font-semibold flex items-center justify-center space-x-3">
+                                <span>🔍</span><span>Continue with Google</span>
+                            </button>
+                            <button onclick="signUp('linkedin')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold flex items-center justify-center space-x-3">
+                                <span>💼</span><span>Continue with LinkedIn</span>
+                            </button>
+                            <button onclick="signUp('email')" class="w-full coral-gradient text-white py-4 rounded-2xl font-semibold">Sign up with Email</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home Feed Screen -->
+        <div id="home" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-2xl font-bold gradient-bg bg-clip-text text-transparent">CatchUP</h1>
+                        <div class="flex space-x-4">
+                            <button class="p-2">🔍</button>
+                            <button class="p-2 relative">
+                                🔔
+                                <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="flex mt-4 bg-gray-100 rounded-2xl p-1">
+                        <button id="allPostsTab" class="flex-1 py-2 px-4 rounded-xl bg-white text-gray-800 font-semibold shadow-sm" onclick="switchTab('allPosts')">All Posts</button>
+                        <button id="myCirclesTab" class="flex-1 py-2 px-4 rounded-xl text-gray-600" onclick="switchTab('myCircles')">My Circles</button>
+                    </div>
+                </div>
+
+                <!-- Feed Content -->
+                <div class="px-4 py-4">
+                    <div id="allPostsContent">
+                        <!-- Post 1 -->
+                        <div class="post-card p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-semibold">A</div>
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h3 class="font-semibold text-gray-800">Alex Chen</h3>
+                                        <span class="skill-tag">🎨 Designer</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">2 hours ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-4">Just finished a new brand identity project! The client wanted something bold and modern. What do you think about using neon gradients in corporate branding? 🌈</p>
+                            <div class="flex items-center justify-between text-gray-500">
+                                <button class="flex items-center space-x-2 hover:text-red-500 transition-colors">
+                                    <span>❤️</span><span class="text-sm">24</span>
+                                </button>
+                                <button class="flex items-center space-x-2 hover:text-blue-500 transition-colors">
+                                    <span>💬</span><span class="text-sm">8</span>
+                                </button>
+                                <button class="flex items-center space-x-2 hover:text-green-500 transition-colors">
+                                    <span>📤</span><span class="text-sm">Share</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Post 2 -->
+                        <div class="post-card p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-semibold">M</div>
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h3 class="font-semibold text-gray-800">Maya Rodriguez</h3>
+                                        <span class="skill-tag">👨‍💻 Developer</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">4 hours ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-4">Looking for a UI/UX designer to collaborate on a fintech app. It's a passion project but has potential for funding. Anyone interested? 🚀</p>
+                            <div class="bg-gray-50 rounded-xl p-3 mb-4">
+                                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                                    <span>🤝</span>
+                                    <span class="font-medium">Collaboration Opportunity</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-500">
+                                <button class="flex items-center space-x-2 hover:text-red-500 transition-colors">
+                                    <span>❤️</span><span class="text-sm">15</span>
+                                </button>
+                                <button class="flex items-center space-x-2 hover:text-blue-500 transition-colors">
+                                    <span>💬</span><span class="text-sm">12</span>
+                                </button>
+                                <button class="flex items-center space-x-2 hover:text-green-500 transition-colors">
+                                    <span>📤</span><span class="text-sm">Share</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Post 3 -->
+                        <div class="post-card p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center text-white font-semibold">J</div>
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2">
+                                        <h3 class="font-semibold text-gray-800">Jordan Kim</h3>
+                                        <span class="skill-tag">✍️ Writer</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">6 hours ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-4">Hosting a creative writing workshop this Saturday! We'll cover storytelling techniques for digital content. Free event, just bring your laptop 📝</p>
+                            <div class="bg-gradient-to-r from-orange-100 to-pink-100 rounded-xl p-3 mb-4">
+                                <div class="flex items-center space-x-2 text-sm text-orange-700">
+                                    <span>🎤</span>
+                                    <span class="font-medium">Event: Creative Writing Workshop</span>
+                                </div>
+                                <p class="text-xs text-orange-600 mt-1">Saturday, 2:00 PM - Downtown Library</p>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-500">
+                                <button class="flex items-center space-x-2 hover:text-red-500 transition-colors">
+                                    <span>❤️</span><span class="text-sm">32</span>
+                                </button>
+                                <button class="flex items-center space-x-2 hover:text-blue-500 transition-colors">
+                                    <span>💬</span><span class="text-sm">6</span>
+                                </button>
+                                <button class="flex items-center space-x-2 hover:text-green-500 transition-colors">
+                                    <span>📤</span><span class="text-sm">Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="myCirclesContent" style="display: none;">
+                        <div class="text-center py-12">
+                            <div class="text-4xl mb-4">👥</div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Your Circles</h3>
+                            <p class="text-gray-600 mb-6">Posts from your joined circles will appear here</p>
+                            <button onclick="showScreen('circles')" class="coral-gradient text-white px-6 py-3 rounded-2xl font-semibold">Explore Circles</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Action Button -->
+            <button class="floating-btn" onclick="showModal('createPost')">
+                <span class="text-white text-2xl font-bold">+</span>
+            </button>
+        </div>
+
+        <!-- Skills Board Screen -->
+        <div id="skills" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h1 class="text-xl font-bold text-gray-800">Skill Requirements</h1>
+                        <button onclick="showScreen('home')" class="text-gray-600">✕</button>
+                    </div>
+                    
+                    <!-- Filters -->
+                    <div class="flex space-x-2 overflow-x-auto pb-2">
+                        <button class="px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-medium whitespace-nowrap">All</button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">Design</button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">Tech</button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">Writing</button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap">Marketing</button>
+                    </div>
+                </div>
+
+                <!-- Requirements List -->
+                <div class="px-4 py-4 space-y-4">
+                    <!-- Requirement 1 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white text-sm font-semibold">S</div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Sarah Wilson</h3>
+                                    <p class="text-xs text-gray-500">Startup Founder</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">💰 Paid</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">🌐 Online</span>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Mobile App UI Designer Needed</h4>
+                        <p class="text-gray-600 text-sm mb-3">Looking for a talented UI designer to create a modern, user-friendly interface for our fitness tracking app. Experience with mobile design patterns required.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="skill-tag text-xs">🎨 Design</span>
+                                <span class="skill-tag text-xs">📱 Mobile</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="px-4 py-2 bg-blue-500 text-white rounded-xl text-sm font-medium">Apply</button>
+                                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium">Chat</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Requirement 2 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-sm font-semibold">T</div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Tech Collective</h3>
+                                    <p class="text-xs text-gray-500">Community Group</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">🤝 Collab</span>
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">📍 Local</span>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Frontend Developer for Open Source Project</h4>
+                        <p class="text-gray-600 text-sm mb-3">Join our team building a community platform for local businesses. Great opportunity to contribute to open source and build your portfolio.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="skill-tag text-xs">👨‍💻 Frontend</span>
+                                <span class="skill-tag text-xs">⚛️ React</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="px-4 py-2 bg-blue-500 text-white rounded-xl text-sm font-medium">Apply</button>
+                                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium">Chat</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Requirement 3 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center text-white text-sm font-semibold">L</div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Luna Marketing</h3>
+                                    <p class="text-xs text-gray-500">Agency</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">🆓 Free</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">🌐 Online</span>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Content Writer for Blog Series</h4>
+                        <p class="text-gray-600 text-sm mb-3">We're looking for a creative writer to help with our weekly blog series about digital marketing trends. Great for building your writing portfolio!</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <span class="skill-tag text-xs">✍️ Writing</span>
+                                <span class="skill-tag text-xs">📈 Marketing</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="px-4 py-2 bg-blue-500 text-white rounded-xl text-sm font-medium">Apply</button>
+                                <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium">Chat</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Screen -->
+        <div id="events" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-xl font-bold text-gray-800">Events</h1>
+                        <button onclick="showModal('createEvent')" class="coral-gradient text-white px-4 py-2 rounded-xl text-sm font-semibold">Host Event</button>
+                    </div>
+                </div>
+
+                <!-- Events List -->
+                <div class="px-4 py-4 space-y-4">
+                    <!-- Event 1 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-start space-x-3 mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl flex items-center justify-center text-white font-semibold">🎨</div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800 mb-1">Design Thinking Workshop</h3>
+                                <p class="text-sm text-gray-600 mb-2">Learn the fundamentals of design thinking and apply them to real-world problems.</p>
+                                <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                    <span>📅 March 15, 2024</span>
+                                    <span>🕐 2:00 PM</span>
+                                    <span>📍 Downtown Hub</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-xs font-semibold">A</div>
+                                <span class="text-sm text-gray-600">Alex Chen</span>
+                                <span class="text-xs text-gray-500">• 24 attending</span>
+                            </div>
+                            <button class="gradient-bg text-white px-4 py-2 rounded-xl text-sm font-semibold">RSVP</button>
+                        </div>
+                    </div>
+
+                    <!-- Event 2 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-start space-x-3 mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-xl flex items-center justify-center text-white font-semibold">💻</div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800 mb-1">React Developers Meetup</h3>
+                                <p class="text-sm text-gray-600 mb-2">Monthly meetup for React developers. This month: Next.js 14 and Server Components.</p>
+                                <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                    <span>📅 March 20, 2024</span>
+                                    <span>🕐 6:30 PM</span>
+                                    <span>🌐 Online</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white text-xs font-semibold">M</div>
+                                <span class="text-sm text-gray-600">Maya Rodriguez</span>
+                                <span class="text-xs text-gray-500">• 156 attending</span>
+                            </div>
+                            <button class="gradient-bg text-white px-4 py-2 rounded-xl text-sm font-semibold">RSVP</button>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                        <div class="flex items-start space-x-3 mb-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-orange-400 to-red-400 rounded-xl flex items-center justify-center text-white font-semibold">✍️</div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800 mb-1">Creative Writing Workshop</h3>
+                                <p class="text-sm text-gray-600 mb-2">Storytelling techniques for digital content creators and copywriters.</p>
+                                <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                    <span>📅 March 22, 2024</span>
+                                    <span>🕐 2:00 PM</span>
+                                    <span>📍 Central Library</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center text-white text-xs font-semibold">J</div>
+                                <span class="text-sm text-gray-600">Jordan Kim</span>
+                                <span class="text-xs text-gray-500">• 18 attending</span>
+                            </div>
+                            <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl text-sm font-semibold">Going</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="profile" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="gradient-bg px-6 py-8 text-white">
+                    <div class="flex items-center justify-between mb-6">
+                        <button onclick="showScreen('home')" class="text-white">←</button>
+                        <button onclick="showScreen('settings')" class="text-white">⚙️</button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-4">You</div>
+                        <h2 class="text-2xl font-bold mb-2">Your Name</h2>
+                        <p class="text-white text-opacity-90 mb-4">Creative professional passionate about design and technology</p>
+                        
+                        <!-- Stats -->
+                        <div class="flex justify-center space-x-8 mb-6">
+                            <div class="text-center">
+                                <div class="text-xl font-bold">127</div>
+                                <div class="text-sm text-white text-opacity-80">Followers</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xl font-bold">89</div>
+                                <div class="text-sm text-white text-opacity-80">Following</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xl font-bold">24</div>
+                                <div class="text-sm text-white text-opacity-80">Posts</div>
+                            </div>
+                        </div>
+                        
+                        <button class="bg-white text-purple-600 px-6 py-2 rounded-xl font-semibold">Message</button>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="px-6 py-4 bg-white border-b border-gray-100">
+                    <h3 class="font-semibold text-gray-800 mb-3">Skills</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">🎨 UI/UX Design</span>
+                        <span class="skill-tag">👨‍💻 Frontend Dev</span>
+                        <span class="skill-tag">📱 Mobile Design</span>
+                        <span class="skill-tag">✍️ Content Writing</span>
+                    </div>
+                </div>
+
+                <!-- Posts -->
+                <div class="px-6 py-4">
+                    <h3 class="font-semibold text-gray-800 mb-4">Recent Posts</h3>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="aspect-square bg-gradient-to-br from-purple-400 to-pink-400 rounded-xl"></div>
+                        <div class="aspect-square bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl"></div>
+                        <div class="aspect-square bg-gradient-to-br from-green-400 to-blue-400 rounded-xl"></div>
+                        <div class="aspect-square bg-gradient-to-br from-orange-400 to-red-400 rounded-xl"></div>
+                        <div class="aspect-square bg-gradient-to-br from-pink-400 to-purple-400 rounded-xl"></div>
+                        <div class="aspect-square bg-gradient-to-br from-cyan-400 to-blue-400 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Screen -->
+        <div id="messages" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-xl font-bold text-gray-800">Messages</h1>
+                        <button class="text-blue-500">✏️</button>
+                    </div>
+                </div>
+
+                <!-- Chat List -->
+                <div class="divide-y divide-gray-100">
+                    <!-- Chat 1 -->
+                    <div class="px-6 py-4 bg-white hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-semibold">A</div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-semibold text-gray-800">Alex Chen</h3>
+                                    <span class="text-xs text-gray-500">2m</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Hey! I'm a motion designer. Saw your post about the fintech app...</p>
+                                <div class="flex items-center space-x-2 mt-1">
+                                    <span class="skill-tag text-xs">🎨 Designer</span>
+                                </div>
+                            </div>
+                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Chat 2 -->
+                    <div class="px-6 py-4 bg-white hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center text-white font-semibold">J</div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-semibold text-gray-800">Jordan Kim</h3>
+                                    <span class="text-xs text-gray-500">1h</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Thanks for joining the writing workshop! Here's the resource list...</p>
+                                <div class="flex items-center space-x-2 mt-1">
+                                    <span class="skill-tag text-xs">✍️ Writer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat 3 -->
+                    <div class="px-6 py-4 bg-white hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-semibold">M</div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-semibold text-gray-800">Maya Rodriguez</h3>
+                                    <span class="text-xs text-gray-500">3h</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Perfect! Let's schedule a call to discuss the project details</p>
+                                <div class="flex items-center space-x-2 mt-1">
+                                    <span class="skill-tag text-xs">👨‍💻 Developer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Screen -->
+        <div id="notifications" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100">
+                    <h1 class="text-xl font-bold text-gray-800">Notifications</h1>
+                </div>
+
+                <!-- Notifications List -->
+                <div class="divide-y divide-gray-100">
+                    <!-- Notification 1 -->
+                    <div class="px-6 py-4 bg-blue-50 border-l-4 border-blue-500">
+                        <div class="flex items-start space-x-3">
+                            <div class="text-2xl">🎯</div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800">New skill requirement matches your profile</h3>
+                                <p class="text-sm text-gray-600 mt-1">A UI/UX Designer position was posted that matches your skills</p>
+                                <span class="text-xs text-gray-500">5 minutes ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification 2 -->
+                    <div class="px-6 py-4 bg-white">
+                        <div class="flex items-start space-x-3">
+                            <div class="text-2xl">🎉</div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800">Event invitation</h3>
+                                <p class="text-sm text-gray-600 mt-1">Jordan Kim invited you to Creative Writing Workshop</p>
+                                <span class="text-xs text-gray-500">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification 3 -->
+                    <div class="px-6 py-4 bg-white">
+                        <div class="flex items-start space-x-3">
+                            <div class="text-2xl">💬</div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800">New comment on your post</h3>
+                                <p class="text-sm text-gray-600 mt-1">Alex Chen commented: "Love the gradient approach!"</p>
+                                <span class="text-xs text-gray-500">4 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Circles Screen -->
+        <div id="circles" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-xl font-bold text-gray-800">Circles</h1>
+                        <button class="coral-gradient text-white px-4 py-2 rounded-xl text-sm font-semibold">Create Circle</button>
+                    </div>
+                </div>
+
+                <!-- My Circles -->
+                <div class="px-6 py-4">
+                    <h2 class="font-semibold text-gray-800 mb-4">My Circles</h2>
+                    <div class="space-y-3">
+                        <!-- Circle 1 -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl flex items-center justify-center text-white font-semibold">🎨</div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-800">Design Collective</h3>
+                                    <p class="text-sm text-gray-600">A community for designers to share work and collaborate</p>
+                                    <span class="text-xs text-gray-500">247 members • 12 new posts</span>
+                                </div>
+                            </div>
+                            <button class="w-full gradient-bg text-white py-2 rounded-xl text-sm font-semibold">View Circle</button>
+                        </div>
+
+                        <!-- Circle 2 -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center text-white font-semibold">💻</div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-800">Frontend Developers</h3>
+                                    <p class="text-sm text-gray-600">React, Vue, Angular - all frontend technologies welcome</p>
+                                    <span class="text-xs text-gray-500">1.2k members • 8 new posts</span>
+                                </div>
+                            </div>
+                            <button class="w-full gradient-bg text-white py-2 rounded-xl text-sm font-semibold">View Circle</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discover Circles -->
+                <div class="px-6 py-4">
+                    <h2 class="font-semibold text-gray-800 mb-4">Discover New Circles</h2>
+                    <div class="space-y-3">
+                        <!-- Circle 3 -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-xl flex items-center justify-center text-white font-semibold">✍️</div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-800">Content Creators</h3>
+                                    <p class="text-sm text-gray-600">Writers, bloggers, and content strategists unite!</p>
+                                    <span class="text-xs text-gray-500">892 members</span>
+                                </div>
+                            </div>
+                            <button class="w-full bg-gray-100 text-gray-700 py-2 rounded-xl text-sm font-semibold">Join Circle</button>
+                        </div>
+
+                        <!-- Circle 4 -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-orange-400 to-red-400 rounded-xl flex items-center justify-center text-white font-semibold">📈</div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-800">Startup Founders</h3>
+                                    <p class="text-sm text-gray-600">Connect with fellow entrepreneurs and share experiences</p>
+                                    <span class="text-xs text-gray-500">456 members</span>
+                                </div>
+                            </div>
+                            <button class="w-full bg-gray-100 text-gray-700 py-2 rounded-xl text-sm font-semibold">Join Circle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settings" class="screen">
+            <div class="pb-20">
+                <!-- Header -->
+                <div class="bg-white px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center space-x-4">
+                        <button onclick="showScreen('profile')" class="text-gray-600">←</button>
+                        <h1 class="text-xl font-bold text-gray-800">Settings</h1>
+                    </div>
+                </div>
+
+                <!-- Settings Options -->
+                <div class="px-6 py-4 space-y-6">
+                    <!-- Profile Section -->
+                    <div>
+                        <h2 class="font-semibold text-gray-800 mb-4">Profile</h2>
+                        <div class="space-y-3">
+                            <button class="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                <span class="text-gray-700">Edit Skills & Interests</span>
+                                <span class="text-gray-400">→</span>
+                            </button>
+                            <button class="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                <span class="text-gray-700">Change Location</span>
+                                <span class="text-gray-400">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Section -->
+                    <div>
+                        <h2 class="font-semibold text-gray-800 mb-4">Preferences</h2>
+                        <div class="space-y-3">
+                            <div class="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                <span class="text-gray-700">Dark Mode</span>
+                                <div class="w-12 h-6 bg-gray-200 rounded-full relative">
+                                    <div class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform"></div>
+                                </div>
+                            </div>
+                            <button class="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                <span class="text-gray-700">Notification Settings</span>
+                                <span class="text-gray-400">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Account Section -->
+                    <div>
+                        <h2 class="font-semibold text-gray-800 mb-4">Account</h2>
+                        <div class="space-y-3">
+                            <button class="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                <span class="text-gray-700">Privacy Settings</span>
+                                <span class="text-gray-400">→</span>
+                            </button>
+                            <button class="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                <span class="text-gray-700">Help & Support</span>
+                                <span class="text-gray-400">→</span>
+                            </button>
+                            <button class="w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+                                <span class="text-red-500">Sign Out</span>
+                                <span class="text-gray-400">→</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Post Modal -->
+        <div id="createPostModal" class="modal">
+            <div class="modal-content p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Create Post</h2>
+                    <button onclick="hideModal('createPost')" class="text-gray-600 text-xl">✕</button>
+                </div>
+                
+                <div class="space-y-4">
+                    <button class="w-full bg-gray-50 rounded-2xl p-4 flex items-center space-x-3 hover:bg-gray-100 transition-colors">
+                        <span class="text-2xl">💭</span>
+                        <span class="font-medium text-gray-700">Text Post</span>
+                    </button>
+                    
+                    <button class="w-full bg-gray-50 rounded-2xl p-4 flex items-center space-x-3 hover:bg-gray-100 transition-colors">
+                        <span class="text-2xl">🤝</span>
+                        <span class="font-medium text-gray-700">Skill Requirement</span>
+                    </button>
+                    
+                    <button class="w-full bg-gray-50 rounded-2xl p-4 flex items-center space-x-3 hover:bg-gray-100 transition-colors">
+                        <span class="text-2xl">🎤</span>
+                        <span class="font-medium text-gray-700">Event</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Event Modal -->
+        <div id="createEventModal" class="modal">
+            <div class="modal-content p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Host Event</h2>
+                    <button onclick="hideModal('createEvent')" class="text-gray-600 text-xl">✕</button>
+                </div>
+                
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Event Title</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter event title">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24" placeholder="Describe your event"></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                            <input type="date" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                            <input type="time" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                        <div class="flex space-x-2">
+                            <button type="button" class="flex-1 py-3 px-4 bg-blue-500 text-white rounded-xl font-medium">Online</button>
+                            <button type="button" class="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-xl font-medium">In-Person</button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="w-full coral-gradient text-white py-4 rounded-2xl font-semibold">Create Event</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="flex items-center justify-around py-3">
+                <button onclick="showScreen('home')" class="flex flex-col items-center space-y-1 text-blue-500">
+                    <span class="text-xl">🏠</span>
+                    <span class="text-xs font-medium">Home</span>
+                </button>
+                <button onclick="showScreen('circles')" class="flex flex-col items-center space-y-1 text-gray-400">
+                    <span class="text-xl">👥</span>
+                    <span class="text-xs font-medium">Circles</span>
+                </button>
+                <button onclick="showScreen('skills')" class="flex flex-col items-center space-y-1 text-gray-400">
+                    <span class="text-xl">🎯</span>
+                    <span class="text-xs font-medium">Skills</span>
+                </button>
+                <button onclick="showScreen('events')" class="flex flex-col items-center space-y-1 text-gray-400">
+                    <span class="text-xl">🎉</span>
+                    <span class="text-xs font-medium">Events</span>
+                </button>
+                <button onclick="showScreen('profile')" class="flex flex-col items-center space-y-1 text-gray-400">
+                    <span class="text-xl">👤</span>
+                    <span class="text-xs font-medium">Profile</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        
+        // Auto-advance splash screen
+        setTimeout(() => {
+            showScreen('onboarding');
+        }, 3000);
+        
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show target screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Update bottom nav
+            updateBottomNav(screenId);
+        }
+        
+        function updateBottomNav(activeScreen) {
+            document.querySelectorAll('.bottom-nav button').forEach(btn => {
+                btn.classList.remove('text-blue-500');
+                btn.classList.add('text-gray-400');
+            });
+            
+            // Highlight active nav item
+            const navMap = {
+                'home': 0,
+                'circles': 1,
+                'skills': 2,
+                'events': 3,
+                'profile': 4
+            };
+            
+            if (navMap[activeScreen] !== undefined) {
+                const activeBtn = document.querySelectorAll('.bottom-nav button')[navMap[activeScreen]];
+                activeBtn.classList.remove('text-gray-400');
+                activeBtn.classList.add('text-blue-500');
+            }
+        }
+        
+        function nextSlide() {
+            document.getElementById(`slide${currentSlide}`).classList.remove('active');
+            currentSlide++;
+            if (currentSlide <= 3) {
+                document.getElementById(`slide${currentSlide}`).classList.add('active');
+            }
+        }
+        
+        function signUp(method) {
+            showScreen('home');
+        }
+        
+        function switchTab(tab) {
+            if (tab === 'allPosts') {
+                document.getElementById('allPostsTab').classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+                document.getElementById('allPostsTab').classList.remove('text-gray-600');
+                document.getElementById('myCirclesTab').classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+                document.getElementById('myCirclesTab').classList.add('text-gray-600');
+                document.getElementById('allPostsContent').style.display = 'block';
+                document.getElementById('myCirclesContent').style.display = 'none';
+            } else {
+                document.getElementById('myCirclesTab').classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+                document.getElementById('myCirclesTab').classList.remove('text-gray-600');
+                document.getElementById('allPostsTab').classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+                document.getElementById('allPostsTab').classList.add('text-gray-600');
+                document.getElementById('myCirclesContent').style.display = 'block';
+                document.getElementById('allPostsContent').style.display = 'none';
+            }
+        }
+        
+        function showModal(modalType) {
+            document.getElementById(modalType + 'Modal').classList.add('active');
+        }
+        
+        function hideModal(modalType) {
+            document.getElementById(modalType + 'Modal').classList.remove('active');
+        }
+        
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d084aab5a37679',t:'MTc1NDgzOTY1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
